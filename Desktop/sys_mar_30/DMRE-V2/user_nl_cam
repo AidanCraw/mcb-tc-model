@@ -1,0 +1,5 @@
+! Users should add all user specific namelist changes below in the form of 
+! namelist_var = new_namelist_value 
+
+fincl1 = 'U:A','V:A','UM_CLUBB:A','VM_CLUBB:A','U500:A','V500:A','U10:A','Z3:A','Z500:A','HEIGHT:A','PBLH:A','T:A','T500:A','TS:A','SST:A','MASS:A'
+nhtfrq = -1
