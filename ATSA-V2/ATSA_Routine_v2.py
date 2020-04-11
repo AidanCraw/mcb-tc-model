@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # In[1]:
@@ -32,9 +32,9 @@ reffile = 'model_1_ref_guide.csv'
 
 
 #--------------------From Model 2------------------------#
-with open(ref_guide_path+'model_2b_advection_data.txt','rb') as file:
+with open(ref_guide_path+'model_2_advection_data.txt','rb') as file:
     mod_data = pickle.load(file)
-with open(ref_guide_path+'model_2b_advection_start.txt','rb') as file:
+with open(ref_guide_path+'model_2_advection_start.txt','rb') as file:
     ncase_start = int(pickle.load(file))-1
 #--------------------------------------------------------#
 
@@ -143,7 +143,7 @@ print('\n\n t-test Results Aggregated by Cooling Region for Cases {0}-{1}:\n'.fo
 print(region_results)
 
 
-# In[5]:
+# In[3]:
 
 
 ## Mapping Subroutine ##
@@ -197,7 +197,7 @@ for tc_track in mod_data[map_case-1]:
         if waypoint[2] >= 180: lon_mask2 = waypoint[2]-360
         else: lon_mask2 = waypoint[2]
         if globe.is_land(waypoint[1],lon_mask2) == True and waypoint[2] >= Hawaii: break
-    if int(waypoint[0]) != len(tc_track)-1:
+    if int(waypoint[0]) != len(tc_track):
         print ('Landfall ({3},{4}) :  [ {0:.3f} , {1:.3f} ]  |  Time: {2} hrs'               .format(waypoint[1],waypoint[2],waypoint[0],int(tc_track[0][1]),int(tc_track[0][2])))
         advec_track(tc_track,'red')
     else: 
@@ -206,4 +206,10 @@ for tc_track in mod_data[map_case-1]:
         
 plt.title('Tropical Cyclone Strikepoint Analysis: Case {0}'.format(case), fontsize=25)
 plt.show()
+
+
+# In[ ]:
+
+
+
 
