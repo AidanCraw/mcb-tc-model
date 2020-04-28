@@ -1,7 +1,7 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 
 #------------------------Package Loading----------------------------------#
@@ -47,18 +47,18 @@ def temp_interpolate(currentv,nextv,step,numsteps):
 #-------------------------------------------------------------------------#
 
 
-# In[16]:
+# In[2]:
 
 
 #----------------------------User Inputs------------------------------------#
 
 method = 'Rk4' # Rk4 Linear
-start_lat = [5,10,15,20,25,30]  #for Passivley Affected Point TC-Proxies
-start_lon = [220,230,240,250]
+start_lat = [10]  #for Passivley Affected Point TC-Proxies
+start_lon = [240]
 trial_start = 1
-trial_stop = 512
+trial_stop = 1
 Print_Output = False
-Diagnostic_Output = False
+Diagnostic_Output = True
 temp_resolution = 1
 #enter 1 for 1hr, 60 for 1min, 3600 for 1s, etc --computational expense scales linearly
 
@@ -141,8 +141,8 @@ for case in range(trial_start,trial_stop+1):
                     time_checkers[2] += 1
                     temp_data = XOD(midfile+run_id+'{0:03d}.cam.h0.{1}-{2:02d}-{3:05d}.nc'                                    .format(trial_step,mod_yr_month,time_checkers[2],time_checkers[0]))
                 finally:
-                    u_vals = XDA.sum((xrdata['U'].isel(lev=np.arange(lev_s,lev_f+1,1))*mass_file),dim='lev')/mass_sum
-                    v_vals = XDA.sum((xrdata['V'].isel(lev=np.arange(lev_s,lev_f+1,1))*mass_file),dim='lev')/mass_sum
+                    u_vals = XDA.sum((temp_data['U'].isel(lev=np.arange(lev_s,lev_f+1,1))*mass_file),dim='lev')/mass_sum
+                    v_vals = XDA.sum((temp_data['V'].isel(lev=np.arange(lev_s,lev_f+1,1))*mass_file),dim='lev')/mass_sum
 
             #Load U, V Vectors for Given Timestep
             ucurrent = u_vals.isel(time=time_checkers[1]).values
@@ -233,15 +233,15 @@ for case in range(trial_start,trial_stop+1):
     print('   Case {0} ({1}/{2}): ADVECTED'.format(case,case-trial_start+1,trial_stop-trial_start+1))
 
 #Write Data for ATSA Routine
-with open(data_out_file+'model_2b_advection_data.txt','wb') as file:
+with open(data_out_file+'model_2c_advection_data.txt','wb') as file:
     pickle.dump(all_tracks,file)
-with open(data_out_file+'model_2b_advection_start.txt','wb') as file:
+with open(data_out_file+'model_2c_advection_start.txt','wb') as file:
     pickle.dump(trial_start,file)
 
 print('\nAdvection Finished.')
 
 
-# In[7]:
+# In[11]:
 
 
 ## Visualization Routine ##
@@ -269,15 +269,15 @@ for track in range(len(tc_master)):
         
 #Add Color and Title
 plt.pcolormesh(lon_b, lat_b, w_mag, cmap='gist_stern')
-#plt.title('Case {0}: TC Advection in Windfield'.format(trial_stop), fontsize=25)
-plt.title('Background Model Windfield'.format(trial_stop), fontsize=25)
+plt.title('Case {0}: TC Advection in Windfield'.format(trial_stop), fontsize=25)
 cb = plt.colorbar(shrink=0.6)
 cb.set_label("Vector Mangnitude (m/s)")
+ax.set_extent([185, 255, 0,50])
 
 plt.show()
 
 
-# In[15]:
+# In[13]:
 
 
 ## Diagnositics Routine --- For Error Checking ##
@@ -285,10 +285,10 @@ plt.show()
 #-----------------------------User Input----------------------------------#
 
 Analyze_Interpolation = False
-Analyze_Advection = True
-RK4_Term_Analysis = False
+Analyze_Advection = False
+RK4_Term_Analysis = True
 ky_on = True
-kx_on = False
+kx_on = True
 chord_map = False
 restrict_time_region = False
 restriction_region = [205,215]
@@ -383,4 +383,10 @@ if Diagnostic_Output == True:
 else:
     print('Diagnostic Output Must be set to [True] in Advection Scheme')
     
+
+
+# In[ ]:
+
+
+
 
